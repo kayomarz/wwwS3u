@@ -55,10 +55,10 @@ Detail usage:
 For details about command line options do:
 $ s3u --help
 
-s3u requires a configuration file named '.s3u' to be present in the directory which needs to be uploaded as the static website.  If you are hosting more than one static site on S3, each will have its own local config file - '.s3u'
+s3u requires a configuration file named '.s3u' which should be be present in the same directory whoose contents are being uploaded.  If you are hosting more than one static site on S3, each will have its own local config file - '.s3u' in its own directory.
 
 Amazon keys:
-The amazon key and key id which is sensitive information may be stored in your configuration file if you can maintain its security.  Alternatively, if you feel this is a security risk, the key and key id can be given as command line parameters.
+The amazon key and key id which is sensitive information can be stored in your configuration file if the conifguration file is maintained securely. i.e. no unauthorized person should be able to view its contents. Alternatively, if you feel this is a security risk, the key and key id can be given as command line parameters.
 
 Filters:
 s3u doesn't upload all files present in your local directory to the bucket.  You can control which files are uploaded based on their filenames using Allow / Deny Filters.
@@ -85,18 +85,21 @@ $ s3u -c
 #    (which may contain sensitive information) from being uploaded by mistake.
 
 denyFiltersRegEx: [ 
-        !ruby/regexp /^./    # names which begin with a period '.'
+        !ruby/regexp /^\./    # Begin with a period ('.')
         ]
 
 allowFiltersRegEx: [ 
          # Commonly used file extensions
          !ruby/regexp /.*.htm(l)?$/i,  
+         !ruby/regexp /.*.js$/i,
          !ruby/regexp /.*.css$/i,
          !ruby/regexp /.*.jp(e)?g$/i,
          !ruby/regexp /.*.bmp$/i,
          !ruby/regexp /.*.gif$/i,
          !ruby/regexp /.*.png$/i, 
          !ruby/regexp /.*.ico$/i, 
+#         !ruby/regexp /.*.pdf$/i,
+#         !ruby/regexp "/(^[^\.]+$)/",  # Does not contain a period ('.')  
          !ruby/regexp /.*.swf$/i,
          !ruby/regexp /.*.swc$/i
          ]

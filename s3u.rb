@@ -30,6 +30,7 @@ module Embbox
     
     def initialize(sourceDir)
       @log = Fh5::Logger.new(STDERR)
+      @log.level=(Logger::INFO)
       @logPrefix = 's3u'
       @sourceDir = File.expand_path(sourceDir.strip)
       @log.debug(@logPrefix) {"Using source dir: '#{@sourceDir}'"}
@@ -38,6 +39,15 @@ module Embbox
         exit 1
       end
       readConfig(@sourceDir)
+    end
+    
+    def debug=(bool)
+      if (bool)
+        @log.level=(Logger::DEBUG)
+      else
+        @log.level=(Logger::INFO)
+      end
+      
     end
     
     def readConfig(dir)
@@ -75,6 +85,7 @@ if __FILE__ == $0
   source = nil
   keyId = nil
   key = nil
+  debug = nil
 
   ACTION_LIST = 0
   ACTION_UPLOAD = 1
@@ -109,6 +120,10 @@ if __FILE__ == $0
       keyId = k
     end
 
+    opts.on('--debug', 'Include debug info in output.') do
+      debug = true
+    end
+
     opts.on('-K', '--key key', 'S3 Key.') do |k|
       key = k
     end
@@ -135,6 +150,7 @@ if __FILE__ == $0
   # s3u is tied down to the source directory specified. 
   source = File.expand_path('.') if (!source)
   s3u = Embbox::S3u.new(source)
+  s3u.debug=(true) if (debug)
 
   # Few options missing on the command line are read form the config.
   bucket = Fh5::Config.instance.bucket if (!bucket)

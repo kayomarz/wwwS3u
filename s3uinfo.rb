@@ -10,11 +10,11 @@ module Embbox
 # Ensure that it has correct file permissions ($ chmod 600 .s3u) and that no one
 # else can read it.  If you are not comfortable with storing AWS key info in this
 # file you may specify them as command line arguments.
-********************************************************************************
+# ********************************************************************************
 
 
 # The bucketname
-bucket: bucket.name
+bucket: bucketname
 
 # S3 Key and Key Id (Read * SECURITY INFO * above)
 # Alternatively, they can be specified using command line arguments.
@@ -38,20 +38,23 @@ keyId: XXXXXXXXXXXXXXXXXXXX
 #    (which may contain sensitive information) from being uploaded by mistake.
 
 denyFiltersRegEx: [ 
-        !ruby/regexp /^\./    # names which begin with a period '.'
+        !ruby/regexp /^\./    # Begin with a period ('.')
         ]
 
 allowFiltersRegEx: [ 
          # Commonly used file extensions
-         !ruby/regexp /.*\.htm(l)?$/i,  
-         !ruby/regexp /.*\.css$/i,
-         !ruby/regexp /.*\.jp(e)?g$/i,
-         !ruby/regexp /.*\.bmp$/i,
-         !ruby/regexp /.*\.gif$/i,
-         !ruby/regexp /.*\.png$/i, 
-         !ruby/regexp /.*\.ico$/i, 
-         !ruby/regexp /.*\.swf$/i,
-         !ruby/regexp /.*\.swc$/i
+         !ruby/regexp /.*.htm(l)?$/i,  
+         !ruby/regexp /.*.js$/i,
+         !ruby/regexp /.*.css$/i,
+         !ruby/regexp /.*.jp(e)?g$/i,
+         !ruby/regexp /.*.bmp$/i,
+         !ruby/regexp /.*.gif$/i,
+         !ruby/regexp /.*.png$/i, 
+         !ruby/regexp /.*.ico$/i, 
+#         !ruby/regexp /.*.pdf$/i,
+#         !ruby/regexp "/(^[^\.]+$)/",  # Does not contain a period ('.')  
+         !ruby/regexp /.*.swf$/i,
+         !ruby/regexp /.*.swc$/i
          ]
 EOF
   end

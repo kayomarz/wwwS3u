@@ -1,0 +1,8 @@
+Version 0.2 - Thu May 26
+========================
+
+1) Added a --debug switch for debugging info
+2) Assigned content type - text/html for filenames that contain no period ('.')
+   i.e. no filename extension.
+3) Fixed a bug and added some regexp for the generated config file.
+4) Added FAQ

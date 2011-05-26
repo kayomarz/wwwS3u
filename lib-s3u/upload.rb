@@ -26,7 +26,8 @@ module Embbox
     # expression, that file will be excluded.
     def uploadDir(localDir, denyFilters = nil, allowFilters = nil)
       localDirWithSeparatorSuffix = File.expand_path(localDir) << File::SEPARATOR
-      ignoredFiles = DirUtil.walk(localDir, denyFilters, allowFilters) do |file|
+      dirUtil = Embbox::DirUtil.new(@log)
+      ignoredFiles = dirUtil.walk(localDir, denyFilters, allowFilters) do |file|
         remotePath = file.gsub(localDirWithSeparatorSuffix, '')
         # @log.debug(@logPrefix) {"  Include  : '#{remotePath}'"} 
         uploadFile(file, remotePath)
@@ -41,7 +42,12 @@ module Embbox
 
     # uploads the content of localFilePath to destination file.
     def uploadFile(localFilePath, destFilePath)
-      contentType = MimeMagic.by_path(destFilePath).type
+      if (!File.basename(localFilePath).match(/\./))
+        @log.debug(@logPrefix) {"No file extension for file '#{localFilePath}'"}
+        contentType = 'text/html'
+      else 
+        contentType = MimeMagic.by_path(destFilePath).type
+      end
       @log.info(@logPrefix) {"Upload: '#{destFilePath}' (#{contentType})"}
       begin
         File.open(localFilePath) do |f|

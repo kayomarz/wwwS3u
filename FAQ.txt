@@ -1,0 +1,5 @@
+FAQ
+===
+
+Q) Why is the bucket name not found in config file even thought it is specified in the config file?
+A) Ensure the config file is correct.  Check for any mistakes before the bucket value.  Are all comments correct? If necessary, start out again with a basic config file using s3u -c.

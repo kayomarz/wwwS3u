@@ -1,11 +1,16 @@
 module Embbox
   class DirUtil
     
+    def initialize(log = nil)
+      @log = log
+      @logPrefix = "DirUtil"
+    end
+    
     # Recursive directory walk, calling block for each file 
     # which passes throgh the filters
     # Deny filters take precedence over Allow filters
-    def self.walk(dir, denyFilters = nil, allowFilters = nil)
-      self.verifyConfigFilename
+    def walk(dir, denyFilters = nil, allowFilters = nil)
+      verifyConfigFilename
       ignoreList = []
       Find.find(dir) do |file|
         if File.file?(file)
@@ -13,12 +18,16 @@ module Embbox
 
           # ignore filenames which start with the config filename        
           if (fileNameWithoutPath.upcase.start_with?(S3U_CONFIG_FILENAME.upcase))
+            @log.debug(@logPrefix) {"Ignore #{fileNameWithoutPath} due to .s3u filter"} if (@log)
             ignoreList.push file
-          elsif (self.match?(fileNameWithoutPath, denyFilters))
+          elsif (filter = match?(fileNameWithoutPath, denyFilters))
+            @log.debug(@logPrefix) {"Ignore #{fileNameWithoutPath} due to deny filter: #{filter.to_s}"} if (@log)
             ignoreList.push file
-          elsif (self.match?(fileNameWithoutPath, allowFilters))
+          elsif (filter = match?(fileNameWithoutPath, allowFilters))
+            @log.debug(@logPrefix) {"Pass #{fileNameWithoutPath} due to allow filter: #{filter.to_s}"} if (@log)
             yield file
           else
+            @log.debug(@logPrefix) {"Ignore #{fileNameWithoutPath} due to no rule"} if (@log)
             ignoreList.push file
           end
           
@@ -28,7 +37,7 @@ module Embbox
     end
     
 
-    def self.verifyConfigFilename
+    def verifyConfigFilename
       # The s3u config file may contain sensitive information such as 
       # the S3 key and key id.
       # Hence the config file should not be uploaded to server
@@ -45,10 +54,10 @@ module Embbox
       end
     end
 
-    def self.match?(filename, filterList)
+    def match?(filename, filterList)
       return false if (!filterList)
       filterList.each do |filter|
-        return true if ((filename =~ filter) != nil)
+        return filter if ((filename =~ filter) != nil)
       end
       return false
     end
