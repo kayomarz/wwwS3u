@@ -1,11 +1,11 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby -I /Users/kayo/projects/wwwS3Upload -I /Users/kayo/projects/wwwS3Upload/external_libs/mimemagic/lib -I /Users/kayo/projects/wwwS3Upload/external_libs/right_http_connection -I /Users/kayo/projects/wwwS3Upload/external_libs/right_aws
 
 RIGH_HTTP_CONNECTION_DIR = 'external_libs/right_http_connection'
 RIGHT_AWS_DIR = 'external_libs/right_aws'
 MIMEMAGIC_DIR = 'external_libs/mimemagic/lib'
 
 APPLICATION_DIR = File::expand_path(File::dirname(File::expand_path(__FILE__)))
-# puts "APPLICATION_DIR: " + APPLICATION_DIR
+ puts "APPLICATION_DIR: " + APPLICATION_DIR
 $:.push(APPLICATION_DIR)
 $:.push("#{APPLICATION_DIR}/#{RIGH_HTTP_CONNECTION_DIR}")
 $:.push("#{APPLICATION_DIR}/#{RIGHT_AWS_DIR}")
