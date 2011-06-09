@@ -18,14 +18,14 @@ require 'lib-s3u/config'
 require 'lib-s3u/logger'
 require 'lib-s3u/upload'
 require 's3uinfo'
+require 's3u_version'
 
 # S3u provides the command line interface to all s3u operations.
 
 module Embbox
   
   S3U_CONFIG_FILENAME = '.s3u'
-  S3U_VERSION = 0.1
-  
+
   class S3u
     
     def initialize(sourceDir)
@@ -130,7 +130,7 @@ if __FILE__ == $0
 
     opts.on('--version', 'Print version and exit.') do
       include Embbox
-      puts "s3u version #{S3U_VERSION}"
+      puts "s3u version #{Embbox::S3U_VERSION}"
       exit
     end
 

@@ -1,3 +1,11 @@
+Version 0.3 Thu Jun  9 17:07:16 IST 2011
+========================================
+
+1) Allow the user to specify the content type based on a filename's extension.
+   This can be done in the config file.  For more info: s3u -c
+2) Version number is now read from version.rb.
+
+
 Version 0.2 - Thu May 26
 ========================
 

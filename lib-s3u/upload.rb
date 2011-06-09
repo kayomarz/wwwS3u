@@ -42,13 +42,18 @@ module Embbox
 
     # uploads the content of localFilePath to destination file.
     def uploadFile(localFilePath, destFilePath)
-      if (!File.basename(localFilePath).match(/\./))
-        @log.debug(@logPrefix) {"No file extension for file '#{localFilePath}'"}
+      ext = File.extname(localFilePath).downcase
+      infoContenType = ""
+      if (ext == "")
         contentType = 'text/html'
+        infoContenType = "No filename extension:"
+      elsif (Fh5::Config.instance.contentTypes && Fh5::Config.instance.contentTypes.has_key?(ext))
+        contentType = Fh5::Config.instance.contentTypes[ext]
+        infoContenType = "Override for '#{ext}':"
       else 
         contentType = MimeMagic.by_path(destFilePath).type
       end
-      @log.info(@logPrefix) {"Upload: '#{destFilePath}' (#{contentType})"}
+      @log.info(@logPrefix) {"Upload: '#{destFilePath}' (#{infoContenType}#{contentType})"}
       begin
         File.open(localFilePath) do |f|
           content = f.read

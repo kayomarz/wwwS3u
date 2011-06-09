@@ -41,8 +41,8 @@ denyFiltersRegEx: [
         !ruby/regexp /^\./    # Begin with a period ('.')
         ]
 
-allowFiltersRegEx: [ 
          # Commonly used file extensions
+         !ruby/regexp "/(^[^\.]+$)/",  # Files that don't have a period  
          !ruby/regexp /.*.htm(l)?$/i,  
          !ruby/regexp /.*.js$/i,
          !ruby/regexp /.*.css$/i,
@@ -51,16 +51,20 @@ allowFiltersRegEx: [
          !ruby/regexp /.*.gif$/i,
          !ruby/regexp /.*.png$/i, 
          !ruby/regexp /.*.ico$/i, 
-#         !ruby/regexp /.*.pdf$/i,
-#         !ruby/regexp "/(^[^\.]+$)/",  # Does not contain a period ('.')  
+         !ruby/regexp /.*.pdf$/i,
          !ruby/regexp /.*.swf$/i,
          !ruby/regexp /.*.swc$/i
          ]
+
+# Override default content types set on the server based on filename extension.
+# Filename extensions are downcased before finding a match in 'contentTypes'. Hence
+# for 'contentTypes' in this config, file extensions should be lowercase (eg: .jpg, .gif).
+contentTypes:
+# .php: text/html
+# .any-ext: text/html
 EOF
   end
 end
-
-
 
 if __FILE__ == $0
   include Embbox::Config
