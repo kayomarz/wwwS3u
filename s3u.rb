@@ -163,10 +163,19 @@ if __FILE__ == $0
   checkForSwitch(bucket, 'bucket')
   
 #   Perform action
-  if (action == ACTION_LIST)
-    s3u.list(bucket)
-  elsif (action == ACTION_UPLOAD)
-    s3u.upload(bucket)
+  begin
+    if (action == ACTION_LIST)
+      s3u.list(bucket)
+    elsif (action == ACTION_UPLOAD)
+      s3u.upload(bucket)
+    end
+  rescue RightAws::AwsError
+    if ($!.http_code == "403")
+      puts "Access Denied"
+      exit 1
+    else
+      raise $!
+    end
   end
   
   

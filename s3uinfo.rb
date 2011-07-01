@@ -38,11 +38,13 @@ keyId: XXXXXXXXXXXXXXXXXXXX
 #    (which may contain sensitive information) from being uploaded by mistake.
 
 denyFiltersRegEx: [ 
-        !ruby/regexp /^\./    # Begin with a period ('.')
+        !ruby/regexp /^\\./,    # Begin with a period ('.')
+        !ruby/regexp /~$/       # Ends with ~
         ]
 
+allowFiltersRegEx: [ 
          # Commonly used file extensions
-         !ruby/regexp "/(^[^\.]+$)/",  # Files that don't have a period  
+         !ruby/regexp "/(^[^.]+$)/",  # Files that don't have a period  
          !ruby/regexp /.*.htm(l)?$/i,  
          !ruby/regexp /.*.js$/i,
          !ruby/regexp /.*.css$/i,

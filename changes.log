@@ -1,3 +1,15 @@
+Version 0.4 Fri Jul  1 10:51:30 IST 2011
+========================================
+
+1) Catch the error and display message when access is denied to aws resource.
+2) Bugfix: s3u config info - When printing the s3u config info
+   using s3u -c, the backslash character for the allow rule
+   to allow files without any extension (period '.').
+   Since the entire info is in a string, any backslash character doesn't
+   get printed.  So any backslash character should be escaped.
+3) s3u config info: Added a deny rule to deny files ending in tilda '~'
+
+
 Version 0.3 Thu Jun  9 17:07:16 IST 2011
 ========================================
 
