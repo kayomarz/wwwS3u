@@ -1,3 +1,11 @@
+Version 0.5 Sat Aug 13 01:02:16 IST 2011
+========================================
+
+1) Assigned Cache-Control headers to all file types
+
+   default is -  Cache-Control: max-age=172800, must-revalidate
+   (172800 seconds = 2 days)
+
 Version 0.4 Fri Jul  1 10:51:30 IST 2011
 ========================================
 

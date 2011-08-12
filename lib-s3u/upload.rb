@@ -41,26 +41,29 @@ module Embbox
     end
 
     # uploads the content of localFilePath to destination file.
-    def uploadFile(localFilePath, destFilePath)
+    def uploadFile(localFilePath, destFilePath, maxAge = 172800) # 2 Days = 1,72,800 seconds 
       ext = File.extname(localFilePath).downcase
-      infoContenType = ""
+      msgContentType = ""
+      cacheControl = "max-age=#{maxAge}, must-revalidate"
       if (ext == "")
         contentType = 'text/html'
-        infoContenType = "No filename extension:"
+        msgContentType = "No file-ext: "
       elsif (Fh5::Config.instance.contentTypes && Fh5::Config.instance.contentTypes.has_key?(ext))
         contentType = Fh5::Config.instance.contentTypes[ext]
-        infoContenType = "Override for '#{ext}':"
+        msgContentType = "Override for '#{ext}':"
       else 
         contentType = MimeMagic.by_path(destFilePath).type
       end
-      @log.info(@logPrefix) {"Upload: '#{destFilePath}' (#{infoContenType}#{contentType})"}
+      @log.info(@logPrefix) {"Upload: '#{destFilePath}' (#{msgContentType}#{contentType}) (#{cacheControl})"}
       begin
         File.open(localFilePath) do |f|
           content = f.read
-          @bucketAdmin.defaultBucket.put(destFilePath, content, {}, 'public-read', {'Content-Type' => contentType})
+          @bucketAdmin.defaultBucket.put(destFilePath, content, {}, 'public-read', 
+            {'Content-Type' => contentType, 'Cache-Control' => cacheControl})
         end
       rescue
         @log.errorException($!, @logPrefix) {"Failed to upload to: '#{destFilePath}'"}
+
         return nil
       end
       
