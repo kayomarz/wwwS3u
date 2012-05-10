@@ -7,6 +7,12 @@ SYSTEM REQUIREMENTS
 'wwwS3Upload' was developed using ruby 1.8.7. It has not been used with any other version of ruby.
 
 
+MULTIPLE CONCURRENT UPLOADS
+===========================
+
+Uploads multiple files concurrently, each in a new process.  The max concurrent upload count is hardcoded to 30. (Edit it in upload.rb, line no.32: `maxProcesses = 30`)
+
+
 INSTALLATION
 ============
 

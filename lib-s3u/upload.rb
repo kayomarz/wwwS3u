@@ -27,17 +27,41 @@ module Embbox
     def uploadDir(localDir, denyFilters = nil, allowFilters = nil)
       localDirWithSeparatorSuffix = File.expand_path(localDir) << File::SEPARATOR
       dirUtil = Embbox::DirUtil.new(@log)
+
+      pids = []
+      maxProcesses = 30
+
       ignoredFiles = dirUtil.walk(localDir, denyFilters, allowFilters) do |file|
         remotePath = file.gsub(localDirWithSeparatorSuffix, '')
         # @log.debug(@logPrefix) {"  Include  : '#{remotePath}'"} 
-        uploadFile(file, remotePath)
+        #uploadFile(file, remotePath)
+
+        pid = uploadFileAsync(file, remotePath)
+        pids.push(pid)
+        puts "PID LIST:\n  #{pids.join(",")}"
+        while (pids.length >= maxProcesses)
+          waitedPid = Process.wait
+          puts "Waited for #{waitedPid}"
+          pids.delete(waitedPid)
+        end
       end
+      
+      puts "Waiting for remaining uploads to finish"
+      Process.waitall
       
       if (ignoredFiles.length > 0)
         ignoredFiles.each do |f|
           @log.info(@logPrefix) {"* EXCLUDE *: '#{f.gsub(localDirWithSeparatorSuffix, '')}'"} 
         end
       end
+    end
+
+    def uploadFileAsync(localFilePath, destFilePath, maxAge = 172800)
+      pid = fork do
+        uploadFile(localFilePath, destFilePath, maxAge)
+      end
+      puts "pid: #{pid}: upload #{localFilePath}"
+      return pid
     end
 
     # uploads the content of localFilePath to destination file.
